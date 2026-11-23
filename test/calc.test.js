@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calcDough, freshYeastPct, yeastPct, buildTimeline, stagesFromPlan, toICS, waterTemp } from "../src/calc.js";
-import { RECIPE } from "../src/recipe.js";
+import { calcDough, freshYeastPct, yeastPct, buildTimeline, stagesFromPlan, toICS, waterTemp } from "../public/src/calc.js";
+import { RECIPE } from "../public/src/recipe.js";
 
 const near = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
 

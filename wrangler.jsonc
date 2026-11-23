@@ -1,0 +1,9 @@
+// Cloudflare Workers static-assets deploy (no build step, no Worker script).
+{
+  "name": "pizzaapp",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application"
+  }
+}
