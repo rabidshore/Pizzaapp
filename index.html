@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pizza Lab</title>
+  <meta name="theme-color" content="#b23a1f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🍕 Pizza Lab</h1>
+    <span id="recipe-version" class="muted"></span>
+  </header>
+
+  <main>
+    <!-- DOUGH -->
+    <section id="tab-dough" class="tab active">
+      <div class="card">
+        <h2>Batch</h2>
+        <div class="grid">
+          <label>Balls <input type="number" data-k="dough.balls" min="1" step="1"></label>
+          <label>Ball weight (g) <input type="number" data-k="dough.ballWeight" min="100" step="5"></label>
+          <label>Hydration % <input type="number" data-k="dough.hydration" step="0.5"></label>
+          <label>Salt % <input type="number" data-k="dough.salt" step="0.1"></label>
+          <label>Oil % <input type="number" data-k="dough.oil" step="0.5"></label>
+          <label>Sugar/malt % <input type="number" data-k="dough.sugar" step="0.25"></label>
+          <label>Residue % <input type="number" data-k="dough.residue" step="0.5"></label>
+          <label>Yeast type
+            <select data-k="dough.yeastType">
+              <option value="fresh">Fresh</option>
+              <option value="instant">Instant dry</option>
+              <option value="active">Active dry</option>
+            </select>
+          </label>
+          <label>Preferment
+            <select data-k="dough.preferment.type">
+              <option value="none">None (direct)</option>
+              <option value="poolish">Poolish (100 %)</option>
+              <option value="biga">Biga (50 %)</option>
+            </select>
+          </label>
+          <label class="pf-only">Preferment flour % <input type="number" data-k="dough.preferment.flourPct" step="5"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Fermentation <span class="muted small">(drives yeast amount)</span></h2>
+        <div class="seg" role="tablist">
+          <button data-mode="rt">Room temp</button>
+          <button data-mode="cold">Cold</button>
+        </div>
+        <div class="grid">
+          <label class="rt-only">Total RT hours <input type="number" data-k="plan.rtHours" step="1"></label>
+          <label>Room temp °C <input type="number" data-k="plan.rtTemp" step="0.5"></label>
+          <label>Bulk before balling/fridge (h) <input type="number" data-k="plan.bulkHours" step="0.5"></label>
+          <label class="cold-only">Fridge hours <input type="number" data-k="plan.coldHours" step="1"></label>
+          <label class="cold-only">Fridge °C <input type="number" data-k="plan.fridgeTemp" step="0.5"></label>
+          <label class="cold-only">Temper hours <input type="number" data-k="plan.temperHours" step="0.5"></label>
+          <label>Yeast calibration × <input type="number" data-k="dough.yeastCalibration" step="0.05" min="0.1"></label>
+        </div>
+        <p class="muted small" id="yeast-note"></p>
+      </div>
+
+      <div class="card result">
+        <h2>Weigh out</h2>
+        <table id="out"></table>
+        <div id="pf-out"></div>
+        <p class="small" id="water-temp"></p>
+        <div class="row">
+          <button id="reset-recipe" class="ghost">Reset to house recipe</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAN -->
+    <section id="tab-plan" class="tab">
+      <div class="card">
+        <h2>When do we eat?</h2>
+        <div class="grid">
+          <label>Eat at <input type="datetime-local" id="eat-at"></label>
+          <label>Preheat (min) <input type="number" data-k="plan.preheatMin" step="5"></label>
+          <label>Mix time (min) <input type="number" data-k="plan.mixMin" step="1"></label>
+          <label>Rest after mix (min) <input type="number" data-k="plan.restMin" step="5"></label>
+          <label class="cold-only">Ball before fridge
+            <select data-k="plan.ballBeforeCold"><option value="true">Yes</option><option value="false">No (bulk cold)</option></select>
+          </label>
+          <label class="pf-only">Preferment hours <input type="number" data-k="plan.prefermentHours" step="1"></label>
+        </div>
+        <p class="muted small">Fermentation settings are shared with the Dough tab.</p>
+      </div>
+      <div class="card">
+        <h2>Timeline</h2>
+        <ol id="timeline" class="timeline"></ol>
+        <div class="row">
+          <button id="ics">Add to calendar (.ics)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOG -->
+    <section id="tab-log" class="tab">
+      <div class="card">
+        <h2>Log this bake</h2>
+        <p class="muted small">Saves the current recipe + plan settings with your ratings.</p>
+        <div class="grid">
+          <label>Date <input type="date" id="log-date"></label>
+          <label>Stone temp °C <input type="number" id="log-stone" step="5"></label>
+          <label>Bake time (s) <input type="number" id="log-bake" step="10"></label>
+          <label>Flour
+            <select id="log-flour"></select>
+          </label>
+          <label>Overall (1–10) <input type="number" id="log-overall" min="1" max="10"></label>
+          <label>Crust/rise (1–10) <input type="number" id="log-crust" min="1" max="10"></label>
+          <label>Bottom/char (1–10) <input type="number" id="log-char" min="1" max="10"></label>
+          <label>Handling (1–10) <input type="number" id="log-handling" min="1" max="10"></label>
+        </div>
+        <label class="full">Notes (what went well / badly, what to try)
+          <textarea id="log-notes" rows="3"></textarea>
+        </label>
+        <div class="row"><button id="log-save">Save bake</button></div>
+      </div>
+      <div class="card">
+        <h2>History</h2>
+        <div id="log-list"></div>
+        <div class="row">
+          <button id="export" class="ghost">Export all (JSON)</button>
+          <button id="copy-claude" class="ghost">Copy for Claude</button>
+          <label class="ghost filebtn">Import<input type="file" id="import" accept="application/json" hidden></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- GEAR -->
+    <section id="tab-gear" class="tab">
+      <div id="gear"></div>
+      <div class="card">
+        <h2>Recipe changelog</h2>
+        <ul id="changelog" class="small"></ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button data-tab="dough" class="active">⚖️<span>Dough</span></button>
+    <button data-tab="plan">⏱️<span>Plan</span></button>
+    <button data-tab="log">📓<span>Log</span></button>
+    <button data-tab="gear">🔥<span>Gear</span></button>
+  </nav>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

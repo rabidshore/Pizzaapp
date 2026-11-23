@@ -1,0 +1,9 @@
+{
+  "name": "pizzaapp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "npx --yes serve -l 5173 ."
+  }
+}
