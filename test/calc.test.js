@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { calcDough, freshYeastPct, yeastPct, buildTimeline, stagesFromPlan, toICS, waterTemp } from "../public/src/calc.js";
 import { RECIPE } from "../public/src/recipe.js";
+import { methodSteps } from "../public/src/method.js";
 
 const near = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
 
@@ -49,4 +50,17 @@ test("stages + ics + water temp", () => {
   const ics = toICS(buildTimeline({ ...RECIPE.plan, eatAt: new Date(), preferment: "none" }));
   assert.match(ics, /BEGIN:VCALENDAR[\s\S]*BEGIN:VEVENT[\s\S]*END:VCALENDAR/);
   assert.equal(waterTemp({ targetDough: 24, flourTemp: 20, roomTemp: 20, friction: 10 }), 22);
+});
+
+test("method steps reflect recipe, mode and preferment", () => {
+  const d = RECIPE.dough;
+  const res = calcDough({ ...d, yeastPct: 0.15 });
+  const rt = methodSteps({ dough: d, plan: { ...RECIPE.plan, mode: "rt" }, res, waterTempC: 22 });
+  assert.ok(rt.some((s) => s.title === "Ball") && rt.some((s) => /^Proof/.test(s.title)));
+  assert.ok(rt.find((s) => s.title === "Water + yeast").text.includes(`${Math.round(res.total.water)} g`));
+  assert.ok(rt.every((s, i) => s.n === i + 1));
+  const pd = { ...d, preferment: { type: "poolish", flourPct: 30 } };
+  const cold = methodSteps({ dough: pd, plan: { ...RECIPE.plan, mode: "cold" }, res: calcDough({ ...pd, yeastPct: 0.2 }), waterTempC: 22 });
+  assert.equal(cold[0].phase, "Preferment");
+  assert.ok(cold.some((s) => /^Fridge/.test(s.title)) && cold.some((s) => /^Temper/.test(s.title)));
 });

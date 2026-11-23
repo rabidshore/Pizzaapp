@@ -1,9 +1,10 @@
 import { RECIPE, EQUIPMENT } from "./recipe.js";
+import { methodSteps } from "./method.js";
 import { calcDough, yeastPct, stagesFromPlan, equivalentHours, buildTimeline, toICS, waterTemp, YEAST_FACTORS } from "./calc.js";
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
-const LS_STATE = "pizza.state.v1", LS_LOG = "pizza.log.v1";
+const LS_STATE = "pizza.state.v1", LS_LOG = "pizza.log.v1", LS_TICKS = "pizza.ticks.v1";
 
 const clone = (o) => JSON.parse(JSON.stringify(o));
 const load = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
@@ -18,6 +19,7 @@ function deepMerge(base, over) {
 
 let state = deepMerge({ dough: RECIPE.dough, plan: RECIPE.plan, eatAt: null }, load(LS_STATE, {}));
 let log = load(LS_LOG, []);
+let ticks = new Set(load(LS_TICKS, []));
 
 const get = (path) => path.split(".").reduce((o, k) => o?.[k], state);
 const set = (path, v) => { const ks = path.split("."); const last = ks.pop(); ks.reduce((o, k) => (o[k] ??= {}), state)[last] = v; };
@@ -55,6 +57,12 @@ function bindInputs() {
     state.dough = clone(RECIPE.dough); state.plan = clone(RECIPE.plan); persist();
     $$("[data-k]").forEach((el) => (el.value = String(get(el.dataset.k)))); render();
   });
+  $("#method").addEventListener("change", (ev) => {
+    const k = ev.target.dataset?.step; if (!k) return;
+    ev.target.checked ? ticks.add(k) : ticks.delete(k); save(LS_TICKS, [...ticks]);
+    ev.target.closest("label").classList.toggle("done", ev.target.checked);
+  });
+  $("#method-clear").addEventListener("click", () => { ticks.clear(); save(LS_TICKS, []); render(); });
   $("#ics").addEventListener("click", () => download("pizza-plan.ics", toICS(currentTimeline(), "Pizza"), "text/calendar"));
   bindLog();
 }
@@ -110,6 +118,16 @@ function render() {
 
   const wt = waterTemp({ targetDough: 24, flourTemp: state.plan.rtTemp, roomTemp: state.plan.rtTemp, friction: EQUIPMENT.mixer.frictionC });
   $("#water-temp").textContent = `Water temp for ~24 °C dough: ${Math.round(wt)} °C (Kenwood friction ≈ ${EQUIPMENT.mixer.frictionC} °C).`;
+
+  const steps = methodSteps({ dough: d, plan: state.plan, res, waterTempC: wt });
+  let lastPhase = "";
+  $("#method").innerHTML = steps.map((s) => {
+    const head = s.phase !== lastPhase ? `<li class="phase">${s.phase}</li>` : "";
+    lastPhase = s.phase;
+    const on = ticks.has(s.title);
+    return `${head}<li><label class="step ${on ? "done" : ""}"><input type="checkbox" data-step="${s.title}" ${on ? "checked" : ""}>` +
+      `<div><b>${s.n}. ${s.title}</b><span>${s.text}</span></div></label></li>`;
+  }).join("");
 
   const now = Date.now();
   const tl = currentTimeline();

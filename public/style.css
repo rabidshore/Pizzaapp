@@ -48,3 +48,10 @@ nav.tabs button.active { color: var(--accent); }
 body:not(.mode-cold) .cold-only { display: none; }
 body.mode-cold .rt-only { display: none; }
 body:not(.pf) .pf-only { display: none; }
+.method { list-style: none; padding: 0; margin: 0; }
+.method .phase { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); margin: 14px 0 4px; font-weight: 700; }
+.method label.step { flex-direction: row; align-items: flex-start; gap: 10px; color: var(--fg); font-size: .95rem; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.method label.step input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--accent); }
+.method label.step b { display: block; }
+.method label.step span { color: var(--muted); font-size: .85rem; }
+.method label.step.done b, .method label.step.done span { text-decoration: line-through; opacity: .5; }
