@@ -3,9 +3,10 @@
 // Bump `version` and add a changelog line for every baseline change.
 
 export const RECIPE = {
-  version: 3,
+  version: 4,
   name: "House Neapolitan-ish (grill)",
   changelog: [
+    "v4 2026-11-24: Method switched to mixing by temperature (hold back 20 % water, salt at ~19 °C, stop at 23–24 °C, 10 min rest), plus re-balling. Dallagiovanna flours added (W from video, unconfirmed).",
     "v3 2026-11-24: Yeast recalibrated from bake 2026-11-24 (0.3 g fresh / ~805 g flour peaked at ~19 h, ~22 °C): room-temp calibration 0.23. Cold calibration still 1.0, unvalidated.",
     "v2 2026-11-24: Added style presets (Neapolitan, New York) and flour blends. Neapolitan baseline unchanged.",
     "v1 2026-11-23: Baseline for Weber Spirit 410 + stone (300–330 °C). 63 % hydration, 2.8 % salt, 2 % oil for browning/softness at lower-than-Neapolitan temps.",
@@ -36,8 +37,8 @@ export const RECIPE = {
     temperHours: 4,
     ballBeforeCold: true,
     preheatMin: 45,
-    mixMin: 10,
-    restMin: 15,
+    mixMin: 13,
+    restMin: 10,
     prefermentHours: 16,
   },
 };
@@ -47,7 +48,8 @@ export const RECIPE = {
 // protein = % ; W = Chopin alveograph strength (null = unknown).
 export const FLOURS = [
   { id: "caputo-pizzeria", name: "Caputo Pizzeria 00", protein: 12.5, W: 265, notes: "Your current flour. ~24 h room temp or ≤ 48 h cold." },
-  { id: "dallagiovanna-napoletana", name: "Dallagiovanna La Napoletana", protein: null, W: null, notes: "Candidate. Fill in protein/W from the bag." },
+  { id: "dallagiovanna-napoletana", name: "Dallagiovanna La Napoletana", protein: null, W: 310, notes: "W≈310 per a pizzaiolo's video (check bag). Made for ~24 h room temp." },
+  { id: "dallagiovanna-uniqua-blu", name: "Dallagiovanna Uniqua Blu (Tipo 1)", protein: null, W: 340, notes: "W≈340 per the same video (unconfirmed). 10 % pushes past 24 h; 15–20 % for longer." },
   { id: "manitoba", name: "Manitoba / strong flour", protein: 14, W: 350, notes: "Strengthener: 10–30 % extends fermentation tolerance and chew (NY)." },
   { id: "bread", name: "Bread flour (generic)", protein: 12.5, W: null, notes: "NY-style base." },
   { id: "plain", name: "Plain wheat flour (hvedemel)", protein: 10.5, W: 180, notes: "Weak; short ferments only, or blend ≤ 30 %." },

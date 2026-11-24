@@ -75,7 +75,7 @@ test("flour blend math", () => {
   near(b.W.value, 265 * 0.7 + 350 * 0.3, 1e-9);
   near(b.parts[0].grams + b.parts[1].grams, 500, 1e-9);
   near(b.parts[1].grams, 150, 1e-9);
-  const u = blendFlour([{ id: "caputo-pizzeria", pct: 50 }, { id: "dallagiovanna-napoletana", pct: 40 }], lib, 100);
+  const u = blendFlour([{ id: "caputo-pizzeria", pct: 50 }, { id: "bread", pct: 40 }], lib, 100);
   assert.equal(u.valid, false);
   near(u.W.coverage, 50 / 90, 1e-9);
   for (const p of Object.values(PRESETS)) assert.equal(p.dough.flours.reduce((s, f) => s + f.pct, 0), 100);
