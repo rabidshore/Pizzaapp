@@ -80,3 +80,8 @@ test("flour blend math", () => {
   near(u.W.coverage, 50 / 90, 1e-9);
   for (const p of Object.values(PRESETS)) assert.equal(p.dough.flours.reduce((s, f) => s + f.pct, 0), 100);
 });
+
+test("RT calibration reproduces bake 2026-11-24 (~0.037 % fresh peaks ~19 h at 22 °C)", () => {
+  const y = freshYeastPct([{ hours: 19, tempC: 22 }], RECIPE.dough.yeastCalRT);
+  near(y, 0.037, 0.004);
+});

@@ -3,9 +3,10 @@
 // Bump `version` and add a changelog line for every baseline change.
 
 export const RECIPE = {
-  version: 2,
+  version: 3,
   name: "House Neapolitan-ish (grill)",
   changelog: [
+    "v3 2026-11-24: Yeast recalibrated from bake 2026-11-24 (0.3 g fresh / ~805 g flour peaked at ~19 h, ~22 °C): room-temp calibration 0.23. Cold calibration still 1.0, unvalidated.",
     "v2 2026-11-24: Added style presets (Neapolitan, New York) and flour blends. Neapolitan baseline unchanged.",
     "v1 2026-11-23: Baseline for Weber Spirit 410 + stone (300–330 °C). 63 % hydration, 2.8 % salt, 2 % oil for browning/softness at lower-than-Neapolitan temps.",
   ],
@@ -18,7 +19,9 @@ export const RECIPE = {
     sugar: 0,
     residue: 2,
     yeastType: "fresh",
-    yeastCalibration: 1,
+    // Per-mode yeast-model multipliers. RT measured 2026-11-24; cold not yet validated.
+    yeastCalRT: 0.23,
+    yeastCalCold: 1,
     preferment: { type: "none", flourPct: 30 },
     style: "neapolitan",
     flours: [{ id: "caputo-pizzeria", pct: 100 }],

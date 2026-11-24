@@ -1,7 +1,7 @@
 // Pure calculation functions. No DOM. Tested in test/calc.test.js.
 
 // Relative fermentation rate vs 20 °C. Rate roughly doubles every ~9 °C in the
-// 4–30 °C range. Empirical; tune via profile.yeastCalibration.
+// 4–30 °C range. Empirical; tune via dough.yeastCalRT / yeastCalCold.
 export function fermentRate(tempC) {
   return Math.pow(2, (tempC - 20) / 9);
 }

@@ -54,9 +54,10 @@ export function methodSteps({ dough, plan, res, waterTempC }) {
     `towards you on the bench to tighten the skin; pinch the seam. Into lightly oiled, covered containers (or a dough box with space between).`;
   if (cold) {
     if (plan.bulkHours > 0) add("Ferment", `Bulk ${h(plan.bulkHours)} at room temp`,
-      `Lightly oiled, covered tub, ~${plan.rtTemp} °C. Optional: one stretch-and-fold after 30 min.`);
+      `Lightly oiled, covered tub, ~${plan.rtTemp} °C. Optional: one stretch-and-fold after 30 min. ` +
+      `Mark the dough level on the tub; it should rise ~50–70 %. If it is already there early, move straight on.`);
     if (plan.ballBeforeCold) {
-      add("Ferment", "Ball", ballText);
+      add("Ferment", "Ball", `${ballText} Leave them ~30 min at room temp so the yeast gets going before the cold.`);
       add("Ferment", `Fridge ${h(plan.coldHours)}`, `Covered, at ~${plan.fridgeTemp ?? 4} °C. Keep containers airtight so balls don't skin.`);
       add("Ferment", `Temper ${h(plan.temperHours)}`,
         `Out of the fridge ${h(plan.temperHours)} before baking, covered, at room temp. Ready when relaxed, ~doubled and a poke springs back slowly.`);
@@ -66,7 +67,8 @@ export function methodSteps({ dough, plan, res, waterTempC }) {
         `${ballText} Then rest covered at room temp ${h(plan.temperHours)} until relaxed and ~doubled.`);
     }
   } else {
-    add("Ferment", `Bulk ${h(plan.bulkHours)}`, `Lightly oiled, covered tub at ~${plan.rtTemp} °C.`);
+    add("Ferment", `Bulk ${h(plan.bulkHours)}`,
+      `Lightly oiled, covered tub at ~${plan.rtTemp} °C. Mark the level: ball when it has risen ~50–70 % (or after ${h(plan.bulkHours)}, whichever comes first).`);
     add("Ferment", "Ball", ballText);
     add("Ferment", `Proof ${h(plan.rtHours - plan.bulkHours)}`,
       `Covered at ~${plan.rtTemp} °C. Ready when ~doubled, relaxed, with small bubbles on the surface. ` +
