@@ -138,7 +138,7 @@ function render() {
     ${o.oil ? `<tr><td>Olive oil</td><td>${fmtG(o.oil)}</td></tr>` : ""}
     ${o.sugar ? `<tr><td>Sugar/malt</td><td>${fmtG(o.sugar)}</td></tr>` : ""}
     <tr><td>${yName}</td><td>${o.yeast.toFixed(2)} g</td></tr>
-    ${o.yeast > 0 && o.yeast < 1 ? `<tr><td colspan="2" class="sub">Too small to weigh? Dissolve 1 g yeast in 100 g water and use ${fmtG(o.yeast * 100)} of it, then use ${fmtG(o.yeast * 100)} less water.</td></tr>` : ""}
+    ${o.yeast > 0 && o.yeast < 0.5 ? `<tr><td colspan="2" class="sub">Too small to weigh? Dissolve 1 g yeast in 100 g water and use ${fmtG(o.yeast * 100)} of it, then use ${fmtG(o.yeast * 100)} less water.</td></tr>` : ""}
     ${withTotal ? `<tr class="total"><td>Total dough</td><td>${fmtG(o.dough)}</td></tr>` : ""}`;
 
   if (res.preferment) {
@@ -161,8 +161,8 @@ function render() {
       ? `Cold calibration is not yet validated by a real bake, so watch the dough. If it over-proofs, lower the calibration; if it under-proofs, raise it.`
       : `Room-temp calibration ${state.dough.yeastCalRT} comes from your 24 Nov bake. If the dough over-proofs, lower it; if it under-proofs, raise it.`);
 
-  const wt = waterTemp({ targetDough: 24, flourTemp: state.plan.rtTemp, roomTemp: state.plan.rtTemp, friction: EQUIPMENT.mixer.frictionC });
-  $("#water-temp").textContent = `Water temp for ~24 °C dough: ${Math.round(wt)} °C (Kenwood friction ≈ ${EQUIPMENT.mixer.frictionC} °C).`;
+  const wt = waterTemp({ targetDough: 23.5, flourTemp: state.plan.rtTemp, roomTemp: state.plan.rtTemp, friction: EQUIPMENT.mixer.frictionC });
+  $("#water-temp").textContent = `Water temp for ~23.5 °C dough: ${Math.round(wt)} °C (Kenwood friction ≈ ${EQUIPMENT.mixer.frictionC} °C).`;
 
   const steps = methodSteps({ dough: d, plan: state.plan, res, waterTempC: wt });
   let lastPhase = "";

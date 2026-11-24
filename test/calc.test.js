@@ -18,8 +18,8 @@ test("dough totals add up to target incl. residue", () => {
   const r = { ...RECIPE.dough, yeastPct: 0.15 };
   const { total } = calcDough(r);
   const sum = total.flour + total.water + total.salt + total.oil + total.sugar + total.yeast;
-  near(sum, 4 * 260 * 1.02, 0.01);
-  near(total.water / total.flour, 0.63, 1e-9);
+  near(sum, RECIPE.dough.balls * RECIPE.dough.ballWeight * (1 + RECIPE.dough.residue / 100), 0.01);
+  near(total.water / total.flour, RECIPE.dough.hydration / 100, 1e-9);
 });
 
 test("poolish splits flour and water", () => {
@@ -81,7 +81,6 @@ test("flour blend math", () => {
   for (const p of Object.values(PRESETS)) assert.equal(p.dough.flours.reduce((s, f) => s + f.pct, 0), 100);
 });
 
-test("RT calibration reproduces bake 2026-11-24 (~0.037 % fresh peaks ~19 h at 22 °C)", () => {
-  const y = freshYeastPct([{ hours: 19, tempC: 22 }], RECIPE.dough.yeastCalRT);
-  near(y, 0.037, 0.004);
+test("RT calibration reproduces video baseline (0.1 % fresh, 24 h at 18 °C)", () => {
+  near(freshYeastPct([{ hours: 24, tempC: 18 }], RECIPE.dough.yeastCalRT), 0.1, 0.005);
 });
