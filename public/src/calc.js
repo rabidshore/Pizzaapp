@@ -153,3 +153,28 @@ export function toICS(steps, title = "Pizza") {
   lines.push("END:VCALENDAR");
   return lines.join("\r\n");
 }
+
+// Flour blend: weighted protein/W (W blends roughly linearly; treat as estimate),
+// per-flour grams for a given flour weight, and a fermentation-tolerance hint.
+// blend: [{id, pct}], lib: {id: {name, protein, W}}
+export function blendFlour(blend, lib, flourGrams = 0) {
+  const total = blend.reduce((s, b) => s + (b.pct || 0), 0);
+  const wavg = (key) => {
+    const known = blend.filter((b) => lib[b.id]?.[key] != null && b.pct > 0);
+    const kp = known.reduce((s, b) => s + b.pct, 0);
+    if (!kp) return null;
+    return { value: known.reduce((s, b) => s + b.pct * lib[b.id][key], 0) / kp, coverage: kp / (total || 1) };
+  };
+  const protein = wavg("protein"), W = wavg("W");
+  const parts = blend.map((b) => ({ id: b.id, name: lib[b.id]?.name ?? b.id, pct: b.pct,
+    grams: total ? (flourGrams * b.pct) / total : 0 }));
+  return { total, valid: Math.abs(total - 100) < 0.01, protein, W, parts, tolerance: fermentTolerance(W?.value) };
+}
+
+export function fermentTolerance(W) {
+  if (W == null) return "Unknown strength: enter W in Gear for a fermentation hint.";
+  if (W < 220) return "Weak: keep fermentation short (≤ 8–12 h), or blend in a stronger flour.";
+  if (W < 290) return "Medium: ~24 h room temp or ≤ 48 h cold.";
+  if (W < 340) return "Strong: comfortable with 48–72 h cold.";
+  return "Very strong: long cold ferments (72 h+); can feel tough if fermented short.";
+}

@@ -20,6 +20,26 @@
     <!-- DOUGH -->
     <section id="tab-dough" class="tab active">
       <div class="card">
+        <h2>Style <span id="style-mod" class="muted small"></span></h2>
+        <div class="seg" id="style-seg">
+          <button data-style="neapolitan">Neapolitan</button>
+          <button data-style="newyork">New York</button>
+        </div>
+        <p class="muted small" id="style-blurb"></p>
+      </div>
+
+      <div class="card">
+        <h2>Flour</h2>
+        <div id="flour-rows"></div>
+        <div class="row">
+          <button id="flour-add" class="ghost">+ Add flour</button>
+          <button id="flour-even" class="ghost">Make it 100 %</button>
+        </div>
+        <p class="small" id="flour-summary"></p>
+        <p class="muted small">Edit protein/W per flour, or add your own, in the Gear tab.</p>
+      </div>
+
+      <div class="card">
         <h2>Batch</h2>
         <div class="grid">
           <label>Balls <input type="number" data-k="dough.balls" min="1" step="1"></label>
@@ -49,7 +69,7 @@
 
       <div class="card">
         <h2>Fermentation <span class="muted small">(drives yeast amount)</span></h2>
-        <div class="seg" role="tablist">
+        <div class="seg" id="mode-seg" role="tablist">
           <button data-mode="rt">Room temp</button>
           <button data-mode="cold">Cold</button>
         </div>
@@ -116,9 +136,6 @@
           <label>Date <input type="date" id="log-date"></label>
           <label>Stone temp °C <input type="number" id="log-stone" step="5"></label>
           <label>Bake time (s) <input type="number" id="log-bake" step="10"></label>
-          <label>Flour
-            <select id="log-flour"></select>
-          </label>
           <label>Overall (1–10) <input type="number" id="log-overall" min="1" max="10"></label>
           <label>Crust/rise (1–10) <input type="number" id="log-crust" min="1" max="10"></label>
           <label>Bottom/char (1–10) <input type="number" id="log-char" min="1" max="10"></label>

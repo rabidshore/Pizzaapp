@@ -55,3 +55,13 @@ body:not(.pf) .pf-only { display: none; }
 .method label.step b { display: block; }
 .method label.step span { color: var(--muted); font-size: .85rem; }
 .method label.step.done b, .method label.step.done span { text-decoration: line-through; opacity: .5; }
+.flour-row { display: grid; grid-template-columns: 1fr 76px 36px; gap: 8px; align-items: center; margin-bottom: 8px; }
+.flour-row .pct { text-align: right; }
+.flour-row button { padding: 8px 0; background: var(--accent-soft); color: var(--accent); }
+.flour-row .hint { grid-column: 1 / -1; margin-top: -4px; }
+.gear-flour { display: grid; grid-template-columns: 1fr 70px 70px; gap: 6px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.gear-flour input { padding: 6px; }
+.gear-flour .n { font-size: .85rem; }
+.gear-flour .n small { display: block; color: var(--muted); }
+.gear-head { font-size: .7rem; color: var(--muted); text-transform: uppercase; }
+td.sub { padding-left: 14px; color: var(--muted); font-size: .85rem; }
