@@ -18,8 +18,8 @@ test("dough totals add up to target incl. residue", () => {
   const r = { ...RECIPE.dough, yeastPct: 0.15 };
   const { total } = calcDough(r);
   const sum = total.flour + total.water + total.salt + total.oil + total.sugar + total.yeast;
-  near(sum, 4 * 260 * 1.02, 0.01);
-  near(total.water / total.flour, 0.63, 1e-9);
+  near(sum, RECIPE.dough.balls * RECIPE.dough.ballWeight * (1 + RECIPE.dough.residue / 100), 0.01);
+  near(total.water / total.flour, RECIPE.dough.hydration / 100, 1e-9);
 });
 
 test("poolish splits flour and water", () => {
@@ -75,8 +75,12 @@ test("flour blend math", () => {
   near(b.W.value, 265 * 0.7 + 350 * 0.3, 1e-9);
   near(b.parts[0].grams + b.parts[1].grams, 500, 1e-9);
   near(b.parts[1].grams, 150, 1e-9);
-  const u = blendFlour([{ id: "caputo-pizzeria", pct: 50 }, { id: "dallagiovanna-napoletana", pct: 40 }], lib, 100);
+  const u = blendFlour([{ id: "caputo-pizzeria", pct: 50 }, { id: "bread", pct: 40 }], lib, 100);
   assert.equal(u.valid, false);
   near(u.W.coverage, 50 / 90, 1e-9);
   for (const p of Object.values(PRESETS)) assert.equal(p.dough.flours.reduce((s, f) => s + f.pct, 0), 100);
+});
+
+test("RT calibration reproduces video baseline (0.1 % fresh, 24 h at 18 °C)", () => {
+  near(freshYeastPct([{ hours: 24, tempC: 18 }], RECIPE.dough.yeastCalRT), 0.1, 0.005);
 });

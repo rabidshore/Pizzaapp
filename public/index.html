@@ -80,7 +80,8 @@
           <label class="cold-only">Fridge hours <input type="number" data-k="plan.coldHours" step="1"></label>
           <label class="cold-only">Fridge °C <input type="number" data-k="plan.fridgeTemp" step="0.5"></label>
           <label class="cold-only">Temper hours <input type="number" data-k="plan.temperHours" step="0.5"></label>
-          <label>Yeast calibration × <input type="number" data-k="dough.yeastCalibration" step="0.05" min="0.1"></label>
+          <label class="rt-only">Yeast calibration × <input type="number" data-k="dough.yeastCalRT" step="0.05" min="0.05"></label>
+          <label class="cold-only">Yeast calibration × <input type="number" data-k="dough.yeastCalCold" step="0.05" min="0.05"></label>
         </div>
         <p class="muted small" id="yeast-note"></p>
       </div>
