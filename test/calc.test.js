@@ -64,3 +64,19 @@ test("method steps reflect recipe, mode and preferment", () => {
   assert.equal(cold[0].phase, "Preferment");
   assert.ok(cold.some((s) => /^Fridge/.test(s.title)) && cold.some((s) => /^Temper/.test(s.title)));
 });
+
+import { blendFlour } from "../public/src/calc.js";
+import { FLOURS, PRESETS } from "../public/src/recipe.js";
+test("flour blend math", () => {
+  const lib = Object.fromEntries(FLOURS.map((f) => [f.id, f]));
+  const b = blendFlour([{ id: "caputo-pizzeria", pct: 70 }, { id: "manitoba", pct: 30 }], lib, 500);
+  assert.ok(b.valid);
+  near(b.protein.value, 12.5 * 0.7 + 14 * 0.3, 1e-9);
+  near(b.W.value, 265 * 0.7 + 350 * 0.3, 1e-9);
+  near(b.parts[0].grams + b.parts[1].grams, 500, 1e-9);
+  near(b.parts[1].grams, 150, 1e-9);
+  const u = blendFlour([{ id: "caputo-pizzeria", pct: 50 }, { id: "dallagiovanna-napoletana", pct: 40 }], lib, 100);
+  assert.equal(u.valid, false);
+  near(u.W.coverage, 50 / 90, 1e-9);
+  for (const p of Object.values(PRESETS)) assert.equal(p.dough.flours.reduce((s, f) => s + f.pct, 0), 100);
+});

@@ -77,15 +77,28 @@ export function methodSteps({ dough, plan, res, waterTempC }) {
   add("Bake", `Preheat ${plan.preheatMin} min`,
     `Stone on the centre grates. All burners high, lid closed, ${plan.preheatMin} min. Aim for ≥ 300 °C on the stone (IR thermometer). ` +
     `Meanwhile: drain sauce/tomatoes, tear and drain mozzarella (wet cheese + 300 °C = soupy pizza), set up toppings.`);
-  add("Bake", "Stretch",
-    `Flip a ball into a bowl of flour (or semolina), coat both sides. Press from the centre outwards, leaving a 1–2 cm rim untouched. ` +
-    `Stretch over the knuckles to ~28–30 cm. No rolling pin — it crushes the rim.`);
-  add("Bake", "Top",
-    `Lightly dusted peel. Sauce thin, toppings light (heavy toppings won't cook through at grill temps). Shake the peel — it must slide freely.`);
-  add("Bake", "Bake 3–5 min",
-    `Slide onto the stone, lid closed immediately. After ~90 s rotate 180°. Total 3–5 min: done when the rim is spotted and the base is browned. ` +
-    `Bottom burning before the top is done → turn burners under the stone down for the last minute. ` +
-    `Close the lid 5–10 min between pizzas so the stone recovers.`);
+  if (dough.style === "newyork") {
+    add("Bake", "Stretch",
+      `Flour both sides. Press out leaving a thin 1 cm lip, then stretch over the knuckles to ~33–35 cm (fit your stone). ` +
+      `Thin and even in the centre: it should almost let light through. No rolling pin.`);
+    add("Bake", "Top",
+      `Lightly dusted peel (semolina helps). Uncooked tomato sauce (crushed tomatoes, salt, oregano), then grated low-moisture mozzarella edge to edge, ` +
+      `with a little parmesan. Shake the peel to make sure it slides freely.`);
+    add("Bake", "Bake 6–8 min",
+      `Slide onto the stone and close the lid immediately. Rotate after ~3 min. Done when the cheese is bubbling with brown spots and the base is ` +
+      `crisp and browned all over (lift an edge to check). If the base gets too dark, turn the burners under the stone down. ` +
+      `Close the lid for 5–10 min between pizzas so the stone recovers. Rest the pizza 1 min on a rack before slicing.`);
+  } else {
+    add("Bake", "Stretch",
+      `Flip a ball into a bowl of flour (or semolina) and coat both sides. Press from the centre outwards, leaving a 1–2 cm rim untouched. ` +
+      `Stretch over the knuckles to ~28–30 cm. Don't use a rolling pin, because it crushes the rim.`);
+    add("Bake", "Top",
+      `Lightly dusted peel. Keep the sauce thin and the toppings light, because heavy toppings won't cook through at grill temperatures. Shake the peel to make sure it slides freely.`);
+    add("Bake", "Bake 3–5 min",
+      `Slide onto the stone and close the lid immediately. After ~90 s rotate 180°. Total 3–5 min: done when the rim is spotted and the base is browned. ` +
+      `If the bottom burns before the top is done, turn the burners under the stone down for the last minute. ` +
+      `Close the lid for 5–10 min between pizzas so the stone recovers.`);
+  }
   add("Bake", "Log it", "Note stone temp, bake time and what you'd change — Log tab.");
   return steps.map((s, i) => ({ ...s, n: i + 1 }));
 }
